@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PlayerBehaviour : MonoBehaviour
 {
+    public animationStateController animatorscript;
     public GameObject Player;
     public float speed;
     public bool punchArea;
@@ -20,11 +21,27 @@ public class PlayerBehaviour : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.A))
         {
-            Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            } 
+            else
+            {
+                //not allowed on action
+                Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
         }
         if (Input.GetKey(KeyCode.D))
         {
-            Player.transform.Translate(speed * Time.deltaTime, 0, 0);
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            }
+            else
+            {
+                //not allowed on action
+                Player.transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
         }
     }
 

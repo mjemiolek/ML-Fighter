@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class animationStateController : MonoBehaviour
 {
-    Animator animator;
+    public Animator animator;
+    public bool left;
+    public bool right;
+    public bool punch;
+    public bool block;
 
     void Start()
     {
@@ -14,10 +18,10 @@ public class animationStateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        bool left = Input.GetKey(KeyCode.A);
-        bool right = Input.GetKey(KeyCode.D);
-        bool punch = Input.GetKey(KeyCode.J);
-        bool block = Input.GetKey(KeyCode.K);
+        left = Input.GetKey(KeyCode.A);
+        right = Input.GetKey(KeyCode.D);
+        punch = Input.GetKey(KeyCode.J);
+        block = Input.GetKey(KeyCode.K);
         if (left)
         {
             animator.SetBool("isWalkingLeft", true);
