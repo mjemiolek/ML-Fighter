@@ -11,6 +11,9 @@ public class CombatMechanic : MonoBehaviour
     public HealthBar healthBarEnemy;
     public GameObject Player;
     public GameObject Enemy;
+    public animationStateController animatorscript;
+    public enemyAnimationStateController animatorscriptEnemy;
+    public float speed;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,13 +26,66 @@ public class CombatMechanic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            }
+            else
+            {
+                //not allowed on action
+                Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            }
+            else
+            {
+                //not allowed on action
+                Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+        }
+
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            }
+            else
+            {
+                //not allowed on action
+                Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            {
+                //allowed on action
+            }
+            else
+            {
+                //not allowed on action
+                Player.transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.Space))//for test
         {
             TakeDamage(20);
             TakeDamageEnemy(20);
         }
 
-        if (Input.GetKeyDown(KeyCode.J) && Player.GetComponent<PlayerBehaviour>().punchArea == true)//for test
+        if (Input.GetKey(KeyCode.J) && Player.GetComponent<PlayerBehaviour>().punchArea == true && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false)//for test
         {
             Debug.Log("hit");
         }
