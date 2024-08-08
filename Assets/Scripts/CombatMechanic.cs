@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatMechanic : MonoBehaviour
@@ -14,6 +15,10 @@ public class CombatMechanic : MonoBehaviour
     public animationStateController animatorscript;
     public enemyAnimationStateController animatorscriptEnemy;
     public float speed;
+    [SerializeField] WalkingTriggerRight bool_script_right;
+    [SerializeField] WalkingTriggerLeft bool_script_left;
+    [SerializeField] WalkingTriggerRightEnemy bool_script_right_enemy;
+    [SerializeField] WalkingTriggerLeftEnemy bool_script_left_enemy;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,58 +31,71 @@ public class CombatMechanic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (bool_script_right_enemy.walkingColliderDetectorRightEnemy == false)
         {
-            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            if (Input.GetKey(KeyCode.RightArrow))
             {
-                //allowed on action
-            }
-            else
-            {
-                //not allowed on action
-                Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
+                //allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+                {
+
+                }
+                else //not allowed on combat action
+                {
+                    Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
+                }
             }
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (bool_script_left_enemy.walkingColliderDetectorLeftEnemy == false)
         {
-            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+            if (Input.GetKey(KeyCode.LeftArrow))
             {
-                //allowed on action
+                //allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+                {
+
+                }
+                else //not allowed on combat action
+                {
+                    Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
+                }
             }
-            else
+        }
+
+        if (bool_script_right.walkingColliderDetectorRight == false)
+        {
+            if (Input.GetKey(KeyCode.D))
             {
-                //not allowed on action
-                Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
+                //allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+                {
+
+                }
+                else //not allowed on combat action
+                {
+                    Player.transform.Translate(speed * Time.deltaTime, 0, 0);
+                }
+            }
+        }
+
+        if (bool_script_left.walkingColliderDetectorLeft == false)
+        {
+            if (Input.GetKey(KeyCode.A))
+            {
+                //allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
+                {
+
+                }
+                else //not allowed on combat action
+                {
+                    Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
+                }
             }
         }
 
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-            {
-                //allowed on action
-            }
-            else
-            {
-                //not allowed on action
-                Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
-            }
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-            {
-                //allowed on action
-            }
-            else
-            {
-                //not allowed on action
-                Player.transform.Translate(speed * Time.deltaTime, 0, 0);
-            }
-        }
 
         if (Input.GetKeyDown(KeyCode.Space))//for test
         {
