@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LowLevel;
 
 public class CombatMechanic : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class CombatMechanic : MonoBehaviour
     public HealthBar healthBarEnemy;
     public GameObject Player;
     public GameObject Enemy;
+    public GameObject playerPunch;
+    public GameObject enemyPunch;
     public animationStateController animatorscript;
     public enemyAnimationStateController animatorscriptEnemy;
     public float speed;
@@ -19,6 +22,9 @@ public class CombatMechanic : MonoBehaviour
     [SerializeField] WalkingTriggerLeft bool_script_left;
     [SerializeField] WalkingTriggerRightEnemy bool_script_right_enemy;
     [SerializeField] WalkingTriggerLeftEnemy bool_script_left_enemy;
+
+    private bool playerBool = true;
+    private bool enemyBool = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -31,16 +37,13 @@ public class CombatMechanic : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //walking scripts
         if (bool_script_right_enemy.walkingColliderDetectorRightEnemy == false)
         {
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                //allowed on combat action
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-                {
-
-                }
-                else //not allowed on combat action
+                if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                    && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
                 {
                     Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
                 }
@@ -51,12 +54,8 @@ public class CombatMechanic : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                //allowed on combat action
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-                {
-
-                }
-                else //not allowed on combat action
+                if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                    && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
                 {
                     Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
                 }
@@ -67,12 +66,8 @@ public class CombatMechanic : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.D))
             {
-                //allowed on combat action
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-                {
-
-                }
-                else //not allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                    && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
                 {
                     Player.transform.Translate(speed * Time.deltaTime, 0, 0);
                 }
@@ -83,18 +78,14 @@ public class CombatMechanic : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.A))
             {
-                //allowed on combat action
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") || animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok"))
-                {
-
-                }
-                else //not allowed on combat action
+                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                    && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
                 {
                     Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
                 }
             }
         }
-
+        //end of walking scripts
 
 
         if (Input.GetKeyDown(KeyCode.Space))//for test
@@ -103,10 +94,41 @@ public class CombatMechanic : MonoBehaviour
             TakeDamageEnemy(20);
         }
 
-        if (Input.GetKey(KeyCode.J) && Player.GetComponent<PlayerBehaviour>().punchArea == true && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false)//for test
+        //combat system
+        if (Input.GetKeyDown(KeyCode.J)
+            && playerPunch.GetComponent<PlayerBehaviour>().punchArea == true
+            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+            && playerBool == true
+            && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
         {
-            Debug.Log("hit");
+            TakeDamageEnemy(10);
+            playerBool = false;
+            StartCoroutine(playerBoolChange());
         }
+
+        if (Input.GetKeyDown(KeyCode.Keypad5)
+            && enemyPunch.GetComponent<EnemyBehaviour>().punchArea == true
+            && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+            && enemyBool == true
+            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+        {
+            TakeDamage(10);
+            enemyBool = false;
+            StartCoroutine(enemyBoolChange());
+        }
+        //end of combat system
+    }
+
+    IEnumerator playerBoolChange()
+    {
+        yield return new WaitForSeconds(0.5f);
+        playerBool = true;
+    }
+
+    IEnumerator enemyBoolChange()
+    {
+        yield return new WaitForSeconds(0.5f);
+        enemyBool = true;
     }
 
     void TakeDamage(int damage)

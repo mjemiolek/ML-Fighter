@@ -20,8 +20,8 @@ public class animationStateController : MonoBehaviour
     {
         left = Input.GetKey(KeyCode.A);
         right = Input.GetKey(KeyCode.D);
-        punch = Input.GetKey(KeyCode.J);
-        block = Input.GetKey(KeyCode.K);
+        punch = Input.GetKeyDown(KeyCode.J);
+        block = Input.GetKeyDown(KeyCode.K);
         if (left)
         {
             animator.SetBool("isWalkingLeft", true);

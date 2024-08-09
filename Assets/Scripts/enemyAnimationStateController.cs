@@ -20,8 +20,8 @@ public class enemyAnimationStateController : MonoBehaviour
     {
         left = Input.GetKey(KeyCode.RightArrow);
         right = Input.GetKey(KeyCode.LeftArrow);
-        punch = Input.GetKey(KeyCode.Keypad5);
-        block = Input.GetKey(KeyCode.Keypad6);
+        punch = Input.GetKeyDown(KeyCode.Keypad5);
+        block = Input.GetKeyDown(KeyCode.Keypad6);
         if (left)
         {
             animator.SetBool("isWalkingLeft", true);

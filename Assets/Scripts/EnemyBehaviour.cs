@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class EnemyBehaviour : MonoBehaviour
 {
-    public animationStateController animatorscript;
-    public GameObject Player;
-    public float speed;
+    //public animationStateController animatorscript;
+    //public GameObject Player;
+    //public float speed;
     public bool punchArea;
 
     // Start is called before the first frame update
