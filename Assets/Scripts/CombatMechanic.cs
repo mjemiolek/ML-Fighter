@@ -98,6 +98,7 @@ public class CombatMechanic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.J)
             && playerPunch.GetComponent<PlayerBehaviour>().punchArea == true
             && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false
             && playerBool == true
             && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
         {
@@ -109,6 +110,7 @@ public class CombatMechanic : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Keypad5)
             && enemyPunch.GetComponent<EnemyBehaviour>().punchArea == true
             && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+            && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false
             && enemyBool == true
             && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
         {
