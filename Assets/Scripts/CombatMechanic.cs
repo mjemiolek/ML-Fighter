@@ -22,6 +22,8 @@ public class CombatMechanic : MonoBehaviour
     [SerializeField] WalkingTriggerLeft bool_script_left;
     [SerializeField] WalkingTriggerRightEnemy bool_script_right_enemy;
     [SerializeField] WalkingTriggerLeftEnemy bool_script_left_enemy;
+    public bool playerHitted = false;
+    public bool enemyHitted = false;
 
     private bool playerBool = true;
     private bool enemyBool = true;
@@ -38,55 +40,16 @@ public class CombatMechanic : MonoBehaviour
     void Update()
     {
         //walking scripts
-        if (bool_script_right_enemy.walkingColliderDetectorRightEnemy == false)
-        {
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
-                    && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
-                {
-                    Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
-                }
-            }
-        }
-
-        if (bool_script_left_enemy.walkingColliderDetectorLeftEnemy == false)
-        {
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
-                    && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
-                {
-                    Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
-                }
-            }
-        }
-
-        if (bool_script_right.walkingColliderDetectorRight == false)
-        {
-            if (Input.GetKey(KeyCode.D))
-            {
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
-                    && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
-                {
-                    Player.transform.Translate(speed * Time.deltaTime, 0, 0);
-                }
-            }
-        }
-
-        if (bool_script_left.walkingColliderDetectorLeft == false)
-        {
-            if (Input.GetKey(KeyCode.A))
-            {
-                if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
-                    && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
-                {
-                    Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
-                }
-            }
-        }
+        //if (Input.GetKey(KeyCode.RightArrow)) EnemyRight();
+        //if (Input.GetKey(KeyCode.LeftArrow)) EnemyLeft();
+        if (Input.GetKey(KeyCode.D)) PlayerRight();
+        if (Input.GetKey(KeyCode.A)) PlayerLeft();
         //end of walking scripts
 
+        //combat system
+        if (Input.GetKeyDown(KeyCode.J)) PlayerPunch();
+        //if (Input.GetKeyDown(KeyCode.Keypad5)) EnemyPunch();
+        //end of combat system
 
         if (Input.GetKeyDown(KeyCode.Space))//for test
         {
@@ -94,21 +57,65 @@ public class CombatMechanic : MonoBehaviour
             TakeDamageEnemy(20);
         }
 
-        //combat system
-        if (Input.GetKeyDown(KeyCode.J)
-            && playerPunch.GetComponent<PlayerBehaviour>().punchArea == true
-            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
-            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false
-            && playerBool == true
-            && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
-        {
-            TakeDamageEnemy(10);
-            playerBool = false;
-            StartCoroutine(playerBoolChange());
-        }
+        //if( currentHealth <= 0 || currentHealthEnemy <= 0)
+        //{
+        //    restart();
+        //}
+    }
 
-        if (Input.GetKeyDown(KeyCode.Keypad5)
-            && enemyPunch.GetComponent<EnemyBehaviour>().punchArea == true
+    public void EnemyLeft()
+    {
+        if (bool_script_left_enemy.walkingColliderDetectorLeftEnemy == false)
+        {
+            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+            {
+                Enemy.transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+        }
+    }
+
+    public void EnemyRight()
+    {
+        if (bool_script_right_enemy.walkingColliderDetectorRightEnemy == false)
+        {
+            if (animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+            {
+                Enemy.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+        }
+    }
+
+    public void PlayerLeft()
+    {
+        if (bool_script_left.walkingColliderDetectorLeft == false)
+        {
+
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+            {
+                Player.transform.Translate(-speed * Time.deltaTime, 0, 0);
+            }
+        }
+    }
+
+    public void PlayerRight()
+    {
+        if (bool_script_right.walkingColliderDetectorRight == false)
+        {
+
+            if (animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+                && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+            {
+                Player.transform.Translate(speed * Time.deltaTime, 0, 0);
+            }
+        }
+    }
+
+    public void EnemyPunch()
+    {
+        if (enemyPunch.GetComponent<EnemyBehaviour>().punchArea == true
             && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
             && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false
             && enemyBool == true
@@ -118,7 +125,25 @@ public class CombatMechanic : MonoBehaviour
             enemyBool = false;
             StartCoroutine(enemyBoolChange());
         }
-        //end of combat system
+    }
+
+    public void PlayerPunch()
+    {
+        if (playerPunch.GetComponent<PlayerBehaviour>().punchArea == true
+            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("cios") == false
+            && animatorscript.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false
+            && playerBool == true
+            && animatorscriptEnemy.animator.GetCurrentAnimatorStateInfo(0).IsName("blok") == false)
+        {
+            TakeDamageEnemy(10);
+            playerBool = false;
+            StartCoroutine(playerBoolChange());
+        }
+    }
+
+    public void EnemyBlock()
+    {
+        animatorscriptEnemy.block = true;
     }
 
     IEnumerator playerBoolChange()
@@ -135,14 +160,26 @@ public class CombatMechanic : MonoBehaviour
 
     void TakeDamage(int damage)
     {
+        playerHitted = true;
         currentHealth -= damage;
-
         healthBar.SetHealth(currentHealth);
     }
     void TakeDamageEnemy(int damage)
     {
+        enemyHitted = true;
         currentHealthEnemy -= damage;
-
         healthBarEnemy.SetHealth(currentHealthEnemy);
+    }
+
+
+    //restart mechanic
+    public void restart()
+    {
+        Player.transform.localPosition = new Vector3(-6f, -5f, 0f);
+        Enemy.transform.localPosition = new Vector3(5f, -5f, 0f);
+        currentHealth = maxHealth;
+        currentHealthEnemy = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+        healthBarEnemy.SetMaxHealth(maxHealth);
     }
 }

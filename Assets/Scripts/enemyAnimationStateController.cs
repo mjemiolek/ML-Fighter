@@ -18,10 +18,10 @@ public class enemyAnimationStateController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        left = Input.GetKey(KeyCode.RightArrow);
-        right = Input.GetKey(KeyCode.LeftArrow);
-        punch = Input.GetKeyDown(KeyCode.Keypad5);
-        block = Input.GetKeyDown(KeyCode.Keypad6);
+        //left = Input.GetKey(KeyCode.RightArrow);
+        //right = Input.GetKey(KeyCode.LeftArrow);
+        //punch = Input.GetKeyDown(KeyCode.Keypad5);
+        //block = Input.GetKeyDown(KeyCode.Keypad6);
         if (left)
         {
             animator.SetBool("isWalkingLeft", true);
